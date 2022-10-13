@@ -1,6 +1,7 @@
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
+import formData from 'express-form-data'
 
 import config from './config'
 import loaders from './loaders'
@@ -13,6 +14,11 @@ loaders()
 const app = express()
 
 app.use(express.json())
+
+app.use(formData.parse())
+app.use(formData.format())
+app.use(formData.union())
+
 app.use(helmet())
 app.use(cors())
 
