@@ -24,7 +24,29 @@ const selectQuestion = Joi.object({
   }).required(),
 }).required()
 
-const questions = Joi.array().items(Joi.alternatives().try(textQuestion, selectQuestion)).required()
+const reqQuestion = Joi.object({
+  questionType: Joi.valid('req').required(),
+  required: Joi.boolean().required(),
+  question: Joi.object({
+    title: Joi.string().required(),
+    columnOptions: Joi.array()
+      .items(
+        Joi.object({
+          column: Joi.string().required(),
+        })
+      )
+      .required(),
+    rowOptions: Joi.array().items(
+      Joi.object({
+        row: Joi.string().required(),
+      })
+    ),
+  }).required(),
+}).required()
+
+const questions = Joi.array()
+  .items(Joi.alternatives().try(textQuestion, selectQuestion, reqQuestion))
+  .required()
 
 export const createValidation = Joi.object({
   title: Joi.string().required(),
