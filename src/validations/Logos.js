@@ -1,6 +1,9 @@
 import Joi from 'joi'
 
-export const createValidation = Joi.object({
+export const createValidationBody = Joi.object({
   title: Joi.string().required(),
-  path: Joi.string().required(),
+})
+
+export const createValidationFile = Joi.object({
+  logo: Joi.any().required(),
 })
