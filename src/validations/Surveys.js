@@ -24,8 +24,8 @@ const selectQuestion = Joi.object({
   }).required(),
 }).required()
 
-const reqQuestion = Joi.object({
-  questionType: Joi.valid('req').required(),
+const rateQuestion = Joi.object({
+  questionType: Joi.valid('rate').required(),
   required: Joi.boolean().required(),
   question: Joi.object({
     title: Joi.string().required(),
@@ -45,7 +45,7 @@ const reqQuestion = Joi.object({
 }).required()
 
 const questions = Joi.array()
-  .items(Joi.alternatives().try(textQuestion, selectQuestion, reqQuestion))
+  .items(Joi.alternatives().try(textQuestion, selectQuestion, rateQuestion))
   .required()
 
 export const createValidation = Joi.object({

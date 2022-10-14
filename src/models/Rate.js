@@ -1,13 +1,13 @@
 import { Schema, model } from 'mongoose'
 
 const ColumnOptionSchema = new Schema({
-  Column: String,
+  column: String,
 })
 const RowOptionSchema = new Schema({
-  Row: String,
+  row: String,
 })
 
-const ReqSchema = new Schema(
+const RateSchema = new Schema(
   {
     title: String,
     columnOptions: [ColumnOptionSchema],
@@ -19,4 +19,4 @@ const ReqSchema = new Schema(
   }
 )
 
-export default model('req', ReqSchema)
+export default model('rate', RateSchema)

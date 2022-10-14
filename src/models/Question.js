@@ -5,7 +5,7 @@ const QuestionSchema = new Schema(
     questionType: {
       type: String,
       required: true,
-      enum: ['text', 'select', 'req'],
+      enum: ['text', 'select', 'rate'],
     },
     question: {
       type: Schema.Types.ObjectId,

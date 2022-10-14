@@ -3,7 +3,7 @@ import Survey from '../models/Survey'
 import Text from '../models/Text'
 import Select from '../models/Select'
 import Question from '../models/Question'
-import Req from '../models/Req'
+import Rate from '../models/Rate'
 
 export default class SurveysService extends BaseService {
   constructor() {
@@ -32,8 +32,8 @@ export default class SurveysService extends BaseService {
           case 'select':
             acc.select.push(curr)
             break
-          case 'req':
-            acc.req.push(curr)
+          case 'rate':
+            acc.rate.push(curr)
             break
         }
         return acc
@@ -41,7 +41,7 @@ export default class SurveysService extends BaseService {
       {
         text: [],
         select: [],
-        req: [],
+        rate: [],
       }
     )
 
@@ -65,18 +65,21 @@ export default class SurveysService extends BaseService {
       }
     })
 
-    const reqQuestions = await Req.insertMany(questionListByType.req.map((curr) => curr.question))
-    questionListByType.req = questionListByType.req.map((item, index) => {
+    const rateQuestions = await Rate.insertMany(
+      questionListByType.rate.map((curr) => curr.question)
+    )
+
+    questionListByType.rate = questionListByType.rate.map((item, index) => {
       return {
         ...item,
-        question: reqQuestions[index]._id,
+        question: rateQuestions[index]._id,
       }
     })
 
     data.questions = [
       ...questionListByType.text,
       ...questionListByType.select,
-      ...questionListByType.req,
+      ...questionListByType.rate,
     ]
 
     const questions = await Question.insertMany(data.questions)
