@@ -2,6 +2,8 @@ import BaseService from './BaseService'
 import Answer from '../models/Answer'
 import TextAnswer from '../models/TextAnswer'
 import SelectAnswer from '../models/SelectAnswer'
+import RateAnswer from '../models/RateAnswer'
+import Survey from '../models/Survey'
 
 export default class AnswersService extends BaseService {
   constructor() {
@@ -32,14 +34,39 @@ export default class AnswersService extends BaseService {
           case 'select-answer':
             acc.select.push(curr)
             break
+          case 'rate-answer':
+            acc.rate.push(curr)
+            break
         }
         return acc
       },
       {
         text: [],
         select: [],
+        rate: [],
       }
     )
+
+    const survey = await Survey.findById(data.survey).populate({
+      path: 'questions',
+      populate: {
+        path: 'question',
+      },
+    })
+
+    // denetimler
+    // rate eksiksiz cevaplanmalı
+    // option cevaplanlar multi select duumuna göre seçim sayısı limitlenmeli
+
+    console.log('survey', JSON.stringify(survey, null, 2))
+
+    survey.questions.forEach((question) => {
+      if (question.questionType === 'rate') {
+        const rateAnswer = answerListByType.rate.find((x) => x.question === question._id.toString())
+        if (rateAnswer.answer.matrix.length !== question.question.rowOptions.length)
+          throw new Error('Tüm soruları cevapla')
+      }
+    })
 
     const textAnswer = await TextAnswer.insertMany(answerListByType.text.map((curr) => curr.answer))
 
@@ -61,7 +88,16 @@ export default class AnswersService extends BaseService {
       }
     })
 
-    data.answers = [...answerListByType.text, ...answerListByType.select]
+    const rateAnswer = await RateAnswer.insertMany(answerListByType.rate.map((curr) => curr.answer))
+    answerListByType.rate = answerListByType.rate.map((item, index) => {
+      return {
+        ...item,
+        answer: rateAnswer[index]._id,
+        // rowOptions: rateAnswer[index]._id,
+      }
+    })
+
+    data.answers = [...answerListByType.text, ...answerListByType.select, ...answerListByType.rate]
 
     return this.model(data).save()
   }
