@@ -7,6 +7,7 @@ const router = Router()
 const controller = new SurveysController()
 
 router.get('/', controller.list)
+router.get('/:id', controller.getById)
 router.route('/').post(validate(createValidation), controller.insert)
 router.route('/').delete(validate(deleteValidation), controller.delete)
 

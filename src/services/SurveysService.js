@@ -22,6 +22,18 @@ export default class SurveysService extends BaseService {
       .populate('logo')
   }
 
+  get(where = {}) {
+    return this.model
+      .findOne(where)
+      .populate({
+        path: 'questions',
+        populate: {
+          path: 'question',
+        },
+      })
+      .populate('logo')
+  }
+
   async insert(data) {
     const questionListByType = data.questions.reduce(
       (acc, curr) => {
