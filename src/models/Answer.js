@@ -15,7 +15,7 @@ const AnswerSchema = new Schema(
         answerType: {
           type: String,
           required: true,
-          enum: ['text-answer', 'select-answer'],
+          enum: ['text-answer', 'select-answer', 'rate-answer'],
         },
         answer: {
           type: Schema.Types.ObjectId,
