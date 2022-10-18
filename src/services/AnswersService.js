@@ -61,7 +61,7 @@ export default class AnswersService extends BaseService {
       if (question.questionType === 'text') {
         if (question.required) {
           const existingAnswer = answerListByType.text.find(
-            (text) => text.question === question._id
+            (text) => text.question !== question._id
           )
           if (!existingAnswer) {
             throw new Error('Tüm soruları cevapla')
@@ -69,13 +69,19 @@ export default class AnswersService extends BaseService {
         }
       } else if (question.questionType === 'select') {
         if (question.required) {
-          if (question._id !== selectAnswer._id) {
+          const existingAnswer = answerListByType.select.find(
+            (select) => select.question !== question._id
+          )
+          if (!existingAnswer) {
             throw new Error('Tüm soruları cevapla')
           }
         }
       } else if (question.questionType === 'rate') {
         if (question.required) {
-          if (question._id !== rateAnswer._id) {
+          const existingAnswer = answerListByType.rate.find(
+            (rate) => rate.question !== question._id
+          )
+          if (!existingAnswer) {
             const rateAnswer = answerListByType.rate.find(
               (x) => x.question === question._id.toString()
             )
