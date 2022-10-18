@@ -6,6 +6,7 @@ import fileUpload from 'express-fileupload'
 
 import config from './config'
 import loaders from './loaders'
+import errorHandler from './middlewares/errorHandler'
 
 import ApiRoutes from './routes'
 
@@ -28,4 +29,5 @@ app.use(cors())
 app.listen(process.env.APP_PORT, () => {
   console.log('Sunucu ayağa kalktı...')
   app.use('/api', ApiRoutes)
+  app.use(errorHandler)
 })
