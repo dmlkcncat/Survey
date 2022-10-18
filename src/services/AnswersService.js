@@ -53,18 +53,36 @@ export default class AnswersService extends BaseService {
         path: 'question',
       },
     })
+    console.log(survey)
 
-    // denetimler
-    // rate eksiksiz cevaplanmalı
-    // option cevaplanlar multi select duumuna göre seçim sayısı limitlenmeli
-
-    console.log('survey', JSON.stringify(survey, null, 2))
+    //Denetimler
 
     survey.questions.forEach((question) => {
-      if (question.questionType === 'rate') {
-        const rateAnswer = answerListByType.rate.find((x) => x.question === question._id.toString())
-        if (rateAnswer.answer.matrix.length !== question.question.rowOptions.length)
-          throw new Error('Tüm soruları cevapla')
+      if (question.questionType === 'text') {
+        if (question.required) {
+          const existingAnswer = answerListByType.text.find(
+            (text) => text.question === question._id
+          )
+          if (!existingAnswer) {
+            throw new Error('Tüm soruları cevapla')
+          }
+        }
+      } else if (question.questionType === 'select') {
+        if (question.required) {
+          if (question._id !== selectAnswer._id) {
+            throw new Error('Tüm soruları cevapla')
+          }
+        }
+      } else if (question.questionType === 'rate') {
+        if (question.required) {
+          if (question._id !== rateAnswer._id) {
+            const rateAnswer = answerListByType.rate.find(
+              (x) => x.question === question._id.toString()
+            )
+            if (rateAnswer.answer.matrix.length !== question.question.rowOptions.length)
+              throw new Error('Tüm soruları cevapla')
+          }
+        }
       }
     })
 
