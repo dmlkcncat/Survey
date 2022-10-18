@@ -7,6 +7,7 @@ const router = Router()
 const controller = new AnswersController()
 
 router.get('/:id', controller.getById)
+router.get('/:id/statistics', controller.getById)
 router.get('/', controller.list)
 router.route('/').post(validate(createValidation), controller.insert)
 // router.route('/').delete(validate(deleteValidation), controller.delete)
