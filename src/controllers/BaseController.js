@@ -7,31 +7,31 @@ export default class BaseController {
     this.service = service
   }
 
-  list = (req, res) => {
+  list = (req, res, next) => {
     this.service
       .list()
       .then((response) => res.status(200).send(response))
-      .catch((e) => res.status(500).send(e))
+      .catch(next)
   }
 
-  insert = (req, res) => {
+  insert = (req, res, next) => {
     this.service
       .insert(req.body)
       .then((response) => res.status(201).send(response))
-      .catch((e) => res.status(500).send(e))
+      .catch(next)
   }
 
-  delete = (req, res) => {
+  delete = (req, res, next) => {
     this.service
       .delete(req.body.id)
       .then((response) => res.status(200).send(response))
-      .catch((e) => res.status(500).send(e))
+      .catch(next)
   }
 
-  getById = (req, res) => {
+  getById = (req, res, next) => {
     this.service
       .get({ _id: req.params.id })
       .then((response) => res.status(200).send(response))
-      .catch((e) => res.status(500).send(e))
+      .catch(next)
   }
 }
