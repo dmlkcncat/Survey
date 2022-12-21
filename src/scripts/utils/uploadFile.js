@@ -1,6 +1,6 @@
 import path from 'path'
 
-const DIR = './uploads/'
+const DIR = 'uploads/'
 
 export default async (file, name = false) => {
   if (!name) {
@@ -9,8 +9,9 @@ export default async (file, name = false) => {
   }
 
   const filePath = DIR + name
+  const fullPath = path.resolve(filePath)
 
-  await file.mv(filePath)
+  await file.mv(fullPath)
 
-  return filePath
+  return '/' + filePath
 }
