@@ -63,6 +63,7 @@ export default class AnswersService extends BaseService {
           const existingAnswer = answerListByType.text.find(
             (text) => text.question !== question._id
           )
+          console.log()
           if (!existingAnswer) {
             throw new Error('Tüm soruları cevapla')
           }

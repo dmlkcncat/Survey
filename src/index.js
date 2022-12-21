@@ -1,3 +1,5 @@
+import path from 'path'
+
 import express from 'express'
 import helmet from 'helmet'
 import cors from 'cors'
@@ -25,6 +27,8 @@ app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(helmet())
 app.use(cors())
+
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 app.listen(process.env.APP_PORT, () => {
   console.log('Sunucu ayağa kalktı...')
